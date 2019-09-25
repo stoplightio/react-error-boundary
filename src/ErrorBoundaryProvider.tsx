@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Reporter } from './types';
 
 const stubbedReporter: Reporter = {
-  error() {
+  reportError() {
     // noop
   },
 };
