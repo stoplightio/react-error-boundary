@@ -22,7 +22,7 @@ export class ErrorBoundary<P extends object = {}> extends React.PureComponent<
     ) {
       for (const recoverableProp of this.props.recoverableProps) {
         if (prevProps[recoverableProp] !== this.props[recoverableProp]) {
-          this.setState({ error: null });
+          this.setError(null);
           break;
         }
       }
