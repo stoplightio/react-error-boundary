@@ -40,6 +40,9 @@
     "react": ">=16.8",
     "react-dom": ">=16.8"
   },
+  "dependencies": {
+    "@stoplight/types": "^11.1.0"
+  },
   "devDependencies": {
     "@stoplight/scripts": "^7.0.3",
     "@stoplight/storybook-config": "^2.0.4",
