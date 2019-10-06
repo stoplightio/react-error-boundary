@@ -1,3 +1,4 @@
+export * from './hooks';
 export * from './ErrorBoundary';
 export * from './ErrorBoundaryProvider';
 export * from './FallbackComponent';
