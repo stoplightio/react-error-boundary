@@ -32,7 +32,10 @@ export class ErrorBoundary<P extends object = {}> extends React.PureComponent<
 
   public componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
     this.setError(error, errorInfo.componentStack);
+    this.handleError(error, errorInfo);
+  }
 
+  protected handleError(error: Error, errorInfo: React.ErrorInfo | null) {
     if (this.props.reportErrors !== false) {
       try {
         this.context.reportError(error);
@@ -43,12 +46,17 @@ export class ErrorBoundary<P extends object = {}> extends React.PureComponent<
 
     if (this.props.onError !== void 0) {
       try {
-        this.props.onError(error, errorInfo.componentStack);
+        this.props.onError(error, errorInfo && errorInfo.componentStack);
       } catch {
         // happens
       }
     }
   }
+
+  public throwError = (error: Error) => {
+    this.setError(error);
+    this.handleError(error, null);
+  };
 
   protected setError(error: Error | null, componentStack: string | null = null) {
     this.setState({ error, componentStack });

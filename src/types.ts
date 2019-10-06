@@ -1,5 +1,5 @@
 import * as React from 'react';
-
+import { ErrorBoundary } from './ErrorBoundary';
 export type ErrorBoundaryState = {
   error: Error | null;
   componentStack: string | null;
@@ -20,7 +20,11 @@ export type ErrorBoundaryProps<P extends object = {}> = {
   reportErrors?: boolean; // true by default
 };
 
-export type ErrorEventHandler = (error: Error, componentStack: string) => void;
+export type ErrorBoundaryForwardedProps = {
+  boundaryRef: React.RefObject<ErrorBoundary>;
+};
+
+export type ErrorEventHandler = (error: Error, componentStack: string | null) => void;
 
 // todo: this should be defined in a different repo concerning reporting
 export type Reporter = any; // any for now
