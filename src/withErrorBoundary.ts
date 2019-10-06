@@ -11,8 +11,8 @@ export const withErrorBoundary = <P extends object = {}>(
     React.createElement(
       ErrorBoundary,
       {
-        ...props,
         ...boundaryProps,
+        ...props,
       },
       React.createElement(Component, props),
     );
