@@ -8,6 +8,7 @@ export class ErrorBoundary<P extends object = {}> extends React.PureComponent<
   ErrorBoundaryState
 > {
   public static contextType = ErrorBoundaryContext;
+  public context!: React.ContextType<typeof ErrorBoundaryContext>;
 
   public state = {
     error: null,
