@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { ErrorBoundary } from './ErrorBoundary';
+
 export type ErrorBoundaryState = {
   error: Error | null;
   componentStack: string | null;

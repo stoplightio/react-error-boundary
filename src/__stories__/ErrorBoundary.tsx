@@ -3,7 +3,7 @@ import { object, text, withKnobs } from '@storybook/addon-knobs';
 import { storiesOf } from '@storybook/react';
 import * as React from 'react';
 
-import { ErrorBoundary, withErrorBoundary } from '../';
+import { ErrorBoundary, FallbackComponent, withErrorBoundary } from '../';
 
 const SchemaViewer: React.FunctionComponent<{ name: string; schema: unknown }> = ({ schema, name }) => {
   if (typeof schema !== 'object' || schema === null) {
@@ -18,6 +18,7 @@ const SchemaViewer: React.FunctionComponent<{ name: string; schema: unknown }> =
 };
 
 const MyWrappedComponent = withErrorBoundary(SchemaViewer, {
+  FallbackComponent: props => <FallbackComponent className="FallbackComponent" {...props} />,
   recoverableProps: ['schema'],
   onError: action('onError'),
 });
