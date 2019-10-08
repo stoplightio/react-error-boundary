@@ -4,13 +4,17 @@
 
 <!-- SUMMARY -->
 
+The React error boundary tailored to Stoplight needs, inspired by [react-error-boundary](https://github.com/bvaughn/react-error-boundary).
+
 - Explore the components: [Storybook](https://stoplightio.github.io/react-error-boundary)
 - View the changelog: [Releases](https://github.com/stoplightio/react-error-boundary/releases)
 
 ### Features
 
-- **Awesome**: It is.
-- .. more features
+- all the great features provided by [react-error-boundary](https://github.com/bvaughn/react-error-boundary),
+- built-in error reporting,
+- supports recovering,
+- fallback component can try to recover error boundary.
 
 ### Installation
 
@@ -18,15 +22,84 @@ Supported in modern browsers and node.
 
 ```bash
 # latest stable
-yarn add react-error-boundary
+yarn add @stoplight/react-error-boundary
 ```
 
 ### Usage
 
-```ts
-import { Library } from "react-error-boundary";
+Before you start, you need to place the `ErrorBoundaryProvider` component, preferably at the root component
 
-// ...example
+```tsx
+import { ErrorBoundaryProvider } from '@stoplight/react-error-boundary';
+
+// a standard instance of Stoplight reporter 
+const reporter: IReporter = {
+  reportError() {},
+};
+
+const App = () => {
+  <ErrorBoundaryProvider reporter={reporter}>
+    <Content />
+  </ErrorBoundaryProvider>
+};
+```
+
+then, you can either make use of:
+
+- withErrorBoundary HOC
+
+```tsx
+import { withErrorBoundary } from '@stoplight/react-error-boundary';
+
+const SchemaViewer: React.FunctionComponent<{ schema: unknown }> = ({ schema }) => {
+  if (typeof schema !== 'object' || schema === null) {
+    throw new Error('Schema must be an object');
+  }
+
+  if (Object.keys(schema).length === 0) {
+    throw new Error('Schema cannot be empty');
+  }
+
+  return <span>This is fine.</span>;
+};
+
+const MyWrappedComponent = withErrorBoundary(SchemaViewer, {
+  recoverableProps: ['schema'],
+});
+
+const Page = () => (
+  <div>
+    <h1>Schema Viewer</h1>
+    <MyWrappedComponent schema={{}} />
+  </div>
+);
+```
+
+- ErrorBoundary component
+
+```tsx
+import { ErrorBoundary } from '@stoplight/react-error-boundary';
+
+const SchemaViewer: React.FunctionComponent<{ schema: unknown }> = ({ schema }) => {
+  if (typeof schema !== 'object' || schema === null) {
+    throw new Error('Schema must be an object');
+  }
+
+  if (Object.keys(schema).length === 0) {
+    throw new Error('Schema cannot be empty');
+  }
+
+  return <span>This is fine.</span>;
+};
+
+const Page = () => (
+  <div>
+    <h1>Schema Viewer</h1>
+    <ErrorBoundary>
+      <SchemaViewer schema={{}} />
+    </ErrorBoundary>
+  </div>
+);
 ```
 
 ### Contributing
