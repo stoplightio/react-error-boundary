@@ -26,6 +26,3 @@ export type ErrorBoundaryForwardedProps = {
 };
 
 export type ErrorEventHandler = (error: Error, componentStack: string | null) => void;
-
-// todo: this should be defined in a different repo concerning reporting
-export type Reporter = any; // any for now

@@ -4,7 +4,7 @@ import { useReporter } from '../useReporter';
 
 jest.mock('../useReporter', () => ({
   useReporter: jest.fn().mockReturnValue({
-    reportError: jest.fn(),
+    error: jest.fn(),
   }),
 }));
 
@@ -38,6 +38,6 @@ describe('useHandledCallback hook', () => {
     const callback = useHandledCallback(fn, []);
 
     expect(callback).not.toThrow();
-    expect(useReporter().reportError).toBeCalledWith(new Error('Test'));
+    expect(useReporter().error).toBeCalledWith(new Error('Test'));
   });
 });
