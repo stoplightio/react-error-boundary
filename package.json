@@ -44,6 +44,7 @@
     "@stoplight/types": "^11.1.0"
   },
   "devDependencies": {
+    "@stoplight/reporter": "^1.1.1",
     "@stoplight/scripts": "^7.0.3",
     "@stoplight/storybook-config": "^2.0.4",
     "@types/enzyme": "^3.10.3",

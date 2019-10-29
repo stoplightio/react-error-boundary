@@ -8,7 +8,7 @@ export const useHandledCallback: typeof useCallback = (fn, deps): any => {
     try {
       return fn(...args);
     } catch (ex) {
-      reporter.reportError(ex);
+      reporter.error(ex);
     }
   }, deps);
 };

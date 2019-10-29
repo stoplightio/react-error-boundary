@@ -38,7 +38,11 @@ export class ErrorBoundary<P extends object = {}> extends React.PureComponent<
   protected handleError(error: Error, errorInfo: React.ErrorInfo | null) {
     if (this.props.reportErrors !== false) {
       try {
-        this.context.reportError(error);
+        if (errorInfo !== null) {
+          this.context.error(error.message, { errorInfo });
+        } else {
+          this.context.error(error);
+        }
       } catch (ex) {
         console.error('Error could not be reported', ex);
       }

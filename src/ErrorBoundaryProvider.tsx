@@ -1,14 +1,8 @@
+import { IReportingAPI } from '@stoplight/reporter';
 import * as React from 'react';
-import { Reporter } from './types';
 
-const stubbedReporter: Reporter = {
-  reportError() {
-    // noop
-  },
-};
+export const ErrorBoundaryContext = React.createContext<IReportingAPI>(console);
 
-export const ErrorBoundaryContext = React.createContext<Reporter>(stubbedReporter);
-
-export const ErrorBoundaryProvider: React.FunctionComponent<{ reporter: Reporter }> = ({ reporter, children }) => (
+export const ErrorBoundaryProvider: React.FunctionComponent<{ reporter: IReportingAPI }> = ({ reporter, children }) => (
   <ErrorBoundaryContext.Provider value={reporter}>{children}</ErrorBoundaryContext.Provider>
 );

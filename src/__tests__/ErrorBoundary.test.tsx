@@ -1,11 +1,11 @@
 /* tslint:disable:jsx-wrap-multiline */
+import { IReportingAPI } from '@stoplight/reporter';
 import { mount } from 'enzyme';
 import * as React from 'react';
 
 import { ErrorBoundary } from '../ErrorBoundary';
 import { ErrorBoundaryProvider } from '../ErrorBoundaryProvider';
 import { FallbackComponent } from '../FallbackComponent';
-import { Reporter } from '../types';
 
 describe('ErrorBoundary component', () => {
   const ex = new TypeError('String expected');
@@ -20,11 +20,12 @@ describe('ErrorBoundary component', () => {
     return <span>{String(value)}</span>;
   };
 
-  let reporter: Reporter;
+  let reporter: IReportingAPI;
 
   beforeEach(() => {
     reporter = {
-      reportError: jest.fn(),
+      ...console,
+      error: jest.fn(),
     };
   });
 
@@ -89,7 +90,11 @@ describe('ErrorBoundary component', () => {
           </ErrorBoundaryProvider>,
         );
 
-        expect(reporter.reportError).toBeCalledWith(ex);
+        expect(reporter.error).toBeCalledWith(ex.message, {
+          errorInfo: {
+            componentStack: expect.any(String),
+          },
+        });
 
         wrapper.unmount();
       });
@@ -103,7 +108,7 @@ describe('ErrorBoundary component', () => {
           </ErrorBoundaryProvider>,
         );
 
-        expect(reporter.reportError).not.toBeCalled();
+        expect(reporter.error).not.toBeCalled();
 
         wrapper.unmount();
       });

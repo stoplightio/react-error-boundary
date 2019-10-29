@@ -1761,6 +1761,67 @@
     lodash "^4.17.4"
     read-pkg-up "^6.0.0"
 
+"@sentry/browser@^5.7.1":
+  version "5.7.1"
+  resolved "https://registry.yarnpkg.com/@sentry/browser/-/browser-5.7.1.tgz#1f8435e2a325d7a09f830065ebce40a2b3c708a4"
+  integrity sha512-K0x1XhsHS8PPdtlVOLrKZyYvi5Vexs9WApdd214bO6KaGF296gJvH1mG8XOY0+7aA5i2A7T3ttcaJNDYS49lzw==
+  dependencies:
+    "@sentry/core" "5.7.1"
+    "@sentry/types" "5.7.1"
+    "@sentry/utils" "5.7.1"
+    tslib "^1.9.3"
+
+"@sentry/core@5.7.1":
+  version "5.7.1"
+  resolved "https://registry.yarnpkg.com/@sentry/core/-/core-5.7.1.tgz#3eb2b7662cac68245931ee939ec809bf7a639d0e"
+  integrity sha512-AOn3k3uVWh2VyajcHbV9Ta4ieDIeLckfo7UMLM+CTk2kt7C89SayDGayJMSsIrsZlL4qxBoLB9QY4W2FgAGJrg==
+  dependencies:
+    "@sentry/hub" "5.7.1"
+    "@sentry/minimal" "5.7.1"
+    "@sentry/types" "5.7.1"
+    "@sentry/utils" "5.7.1"
+    tslib "^1.9.3"
+
+"@sentry/hub@5.7.1":
+  version "5.7.1"
+  resolved "https://registry.yarnpkg.com/@sentry/hub/-/hub-5.7.1.tgz#a52acd9fead7f3779d96e9965c6978aecc8b9cad"
+  integrity sha512-evGh323WR073WSBCg/RkhlUmCQyzU0xzBzCZPscvcoy5hd4SsLE6t9Zin+WACHB9JFsRQIDwNDn+D+pj3yKsig==
+  dependencies:
+    "@sentry/types" "5.7.1"
+    "@sentry/utils" "5.7.1"
+    tslib "^1.9.3"
+
+"@sentry/minimal@5.7.1":
+  version "5.7.1"
+  resolved "https://registry.yarnpkg.com/@sentry/minimal/-/minimal-5.7.1.tgz#56afc537737586929e25349765e37a367958c1e1"
+  integrity sha512-nS/Dg+jWAZtcxQW8wKbkkw4dYvF6uyY/vDiz/jFCaux0LX0uhgXAC9gMOJmgJ/tYBLJ64l0ca5LzpZa7BMJQ0g==
+  dependencies:
+    "@sentry/hub" "5.7.1"
+    "@sentry/types" "5.7.1"
+    tslib "^1.9.3"
+
+"@sentry/types@5.7.1":
+  version "5.7.1"
+  resolved "https://registry.yarnpkg.com/@sentry/types/-/types-5.7.1.tgz#4c4c1d4d891b6b8c2c3c7b367d306a8b1350f090"
+  integrity sha512-tbUnTYlSliXvnou5D4C8Zr+7/wJrHLbpYX1YkLXuIJRU0NSi81bHMroAuHWILcQKWhVjaV/HZzr7Y/hhWtbXVQ==
+
+"@sentry/utils@5.7.1":
+  version "5.7.1"
+  resolved "https://registry.yarnpkg.com/@sentry/utils/-/utils-5.7.1.tgz#cf37ad55f78e317665cd8680f202d307fa77f1d0"
+  integrity sha512-nhirUKj/qFLsR1i9kJ5BRvNyzdx/E2vorIsukuDrbo8e3iZ11JMgCOVrmC8Eq9YkHBqgwX4UnrPumjFyvGMZ2Q==
+  dependencies:
+    "@sentry/types" "5.7.1"
+    tslib "^1.9.3"
+
+"@stoplight/reporter@^1.1.1":
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/@stoplight/reporter/-/reporter-1.1.1.tgz#a4e00b7a85ae6220bee42e3c47ad1408654e9423"
+  integrity sha512-8Qv3ae1aE9RrQAMGW3/1eUI5AvPxA35L1S6k1uTkkmTgP3zkKgA6qkjY9kT6ercnc6c0UbvMBiF0RszRcObC6Q==
+  dependencies:
+    "@sentry/browser" "^5.7.1"
+    "@stoplight/types" "^11.1.1"
+    beaver-logger "^4.0.12"
+
 "@stoplight/scripts@^7.0.3":
   version "7.0.3"
   resolved "https://registry.yarnpkg.com/@stoplight/scripts/-/scripts-7.0.3.tgz#024805f3a97c349836a50821b5ddf68d142be27d"
@@ -1830,6 +1891,13 @@
   version "11.1.0"
   resolved "https://registry.yarnpkg.com/@stoplight/types/-/types-11.1.0.tgz#b29ecd8c8ad27bb564c7820c99f93c27f1d11bf1"
   integrity sha512-z4VqnYIDTcj9R0f8AIDitBWkiAKKJ4W/Z5GJz/3fnBZBa/TD9Oak0xHbicXFXUvqTVCv/7D32PjPYiUX6W/EfQ==
+  dependencies:
+    "@types/json-schema" "^7.0.3"
+
+"@stoplight/types@^11.1.1":
+  version "11.1.1"
+  resolved "https://registry.yarnpkg.com/@stoplight/types/-/types-11.1.1.tgz#a92d1833adb580a72439f42ba73de8f560fd68b4"
+  integrity sha512-IU8U9y/uO548z15DX/Jl053u9VQG8gCwNtypuD4RtskUA7pvHZl4+zzGK3klgIcO6Ql3Jk4/fcrFaN9vjmdEWg==
   dependencies:
     "@types/json-schema" "^7.0.3"
 
@@ -3624,10 +3692,27 @@ bcrypt-pbkdf@^1.0.0:
   dependencies:
     tweetnacl "^0.14.3"
 
+beaver-logger@^4.0.12:
+  version "4.0.12"
+  resolved "https://registry.yarnpkg.com/beaver-logger/-/beaver-logger-4.0.12.tgz#2080918a57063b14f0e3b61e7161b963897acfc9"
+  integrity sha512-6RYZsB+YAb2N0GIf7nhtlDg7Zw0ZzqcGkJH5ET45a7SZJk4aHJD5zziIMCo7zYOhV7saTdvXOdfCFCeQPmG3vg==
+  dependencies:
+    belter "^1.0.17"
+    zalgo-promise "^1.0.26"
+
 before-after-hook@^2.0.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/before-after-hook/-/before-after-hook-2.1.0.tgz#b6c03487f44e24200dd30ca5e6a1979c5d2fb635"
   integrity sha512-IWIbu7pMqyw3EAJHzzHbWa85b6oud/yfKYg5rqB5hNE8CeMi3nX+2C2sj0HswfblST86hpVEOAb9x34NZd6P7A==
+
+belter@^1.0.17:
+  version "1.0.110"
+  resolved "https://registry.yarnpkg.com/belter/-/belter-1.0.110.tgz#0407f2595258039feb19d8e899abdca884f901ea"
+  integrity sha512-bEoTOmK1JgVTvCgrY0PouVCEqrBq5yxbTMVY2Gwe7kNeocvOirnS0B8Tz6xLzKMkZNLsxjJCCqrGcxEWdlpv8g==
+  dependencies:
+    cross-domain-safe-weakmap "^1.0.20"
+    cross-domain-utils "^2.0.10"
+    zalgo-promise "^1.0.28"
 
 big.js@^5.2.2:
   version "5.2.2"
@@ -4839,6 +4924,20 @@ create-react-context@^0.3.0:
   dependencies:
     gud "^1.0.0"
     warning "^4.0.3"
+
+cross-domain-safe-weakmap@^1.0.20:
+  version "1.0.27"
+  resolved "https://registry.yarnpkg.com/cross-domain-safe-weakmap/-/cross-domain-safe-weakmap-1.0.27.tgz#81a5eae012b3cfb7e7e5ca3d737a6c94c3499bab"
+  integrity sha512-f5etDzszteeGh99Dzd7o72FGwd8rLGzgEv50Vk0r8mLzPdQEzcb7Vmx3PfKWD4k66Hp8vN0BLPuBmmMs4UxseQ==
+  dependencies:
+    cross-domain-utils "^2.0.0"
+
+cross-domain-utils@^2.0.0, cross-domain-utils@^2.0.10:
+  version "2.0.29"
+  resolved "https://registry.yarnpkg.com/cross-domain-utils/-/cross-domain-utils-2.0.29.tgz#f531cb8929427ba0a081d2037651dd7b02e7fcea"
+  integrity sha512-Kb0Mgtmo7OIN4QuIYuWNe63pxq9DnlyyzzALcHUPg8zVJIP5QFOGuTe5KgnlyLAx4IxckD6661WaawjSkuTvUA==
+  dependencies:
+    zalgo-promise "^1.0.11"
 
 cross-spawn@6.0.5, cross-spawn@^6.0.0, cross-spawn@^6.0.5:
   version "6.0.5"
@@ -14833,3 +14932,8 @@ yup@^0.27.0:
     property-expr "^1.5.0"
     synchronous-promise "^2.0.6"
     toposort "^2.0.2"
+
+zalgo-promise@^1.0.11, zalgo-promise@^1.0.26, zalgo-promise@^1.0.28:
+  version "1.0.44"
+  resolved "https://registry.yarnpkg.com/zalgo-promise/-/zalgo-promise-1.0.44.tgz#10b6888def701abc0681ec760d73e2bfd2448ae2"
+  integrity sha512-CSQ1xh0vVwgrohObNdysPANonBV+3yl1Xy+qrtMWBvb/a0D/2OUNqb0GJvaAgGtP/gQawtiQAFil2bGSq8aoMA==
