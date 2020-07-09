@@ -1,5 +1,5 @@
 /* tslint:disable:jsx-wrap-multiline */
-import { IReportingAPI } from '@stoplight/reporter';
+import { ICoreReportingAPI } from '@stoplight/reporter';
 import { mount } from 'enzyme';
 import * as React from 'react';
 
@@ -20,7 +20,7 @@ describe('ErrorBoundary component', () => {
     return <span>{String(value)}</span>;
   };
 
-  let reporter: IReportingAPI;
+  let reporter: ICoreReportingAPI;
 
   beforeEach(() => {
     reporter = {
