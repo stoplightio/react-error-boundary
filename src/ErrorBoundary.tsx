@@ -39,9 +39,9 @@ export class ErrorBoundary<P extends object = {}> extends React.PureComponent<
     if (this.props.reportErrors !== false) {
       try {
         if (errorInfo !== null) {
-          this.context.error(error.message, { errorInfo });
+          this.context.reporter.error(error.message, { errorInfo });
         } else {
-          this.context.error(error);
+          this.context.reporter.error(error);
         }
       } catch (ex) {
         console.error('Error could not be reported', ex);
@@ -76,7 +76,7 @@ export class ErrorBoundary<P extends object = {}> extends React.PureComponent<
 
   public render() {
     const {
-      props: { FallbackComponent: Fallback = FallbackComponent, children },
+      props: { FallbackComponent: Fallback = this.context.FallbackComponent || FallbackComponent, children },
       state: { error, componentStack },
     } = this;
 
