@@ -3,5 +3,5 @@ import { useContext } from 'react';
 import { ErrorBoundaryContext } from '../ErrorBoundaryProvider';
 
 export const useReporter = (): ICoreReportingAPI => {
-  return useContext<ICoreReportingAPI>(ErrorBoundaryContext);
+  return useContext<ErrorBoundaryContext>(ErrorBoundaryContext).reporter;
 };

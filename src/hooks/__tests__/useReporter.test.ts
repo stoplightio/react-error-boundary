@@ -18,9 +18,11 @@ describe('useReporter hook', () => {
   });
 
   it('calls useContext with ErrorBoundaryContext and returns', () => {
-    const context = {};
+    const context = {
+      reporter: console,
+    };
     (useContext as jest.Mock).mockReturnValueOnce(context);
-    expect(useReporter()).toBe(context);
+    expect(useReporter()).toBe(console);
     expect(useContext).toBeCalledWith(ErrorBoundaryContext);
   });
 });
