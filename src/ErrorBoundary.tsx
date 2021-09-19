@@ -36,10 +36,15 @@ export class ErrorBoundary<P extends object = {}> extends React.PureComponent<
   }
 
   protected handleError(error: Error, errorInfo: React.ErrorInfo | null) {
+    const componentStack = errorInfo && ErrorBoundary.getComponentStack(errorInfo.componentStack);
+
     if (this.props.reportErrors !== false) {
       try {
-        if (errorInfo !== null) {
-          this.context.reporter.error(error.message, { errorInfo });
+        if (componentStack) {
+          this.context.reporter.error(error.message, {
+            componentStack,
+            componentName: ErrorBoundary.getComponentName(componentStack),
+          });
         } else {
           this.context.reporter.error(error);
         }
@@ -50,11 +55,27 @@ export class ErrorBoundary<P extends object = {}> extends React.PureComponent<
 
     if (this.props.onError !== void 0) {
       try {
-        this.props.onError(error, errorInfo && errorInfo.componentStack);
+        this.props.onError(error, componentStack);
       } catch {
         // happens
       }
     }
+  }
+
+  protected static getComponentStack(componentStack: string) {
+    return componentStack
+      .trim()
+      .split(/\n+/g)
+      .slice(0, 5)
+      .map(line => line.trim())
+      .join('\n');
+  }
+
+  protected static getComponentName(componentStack: string) {
+    const start = componentStack.indexOf('in');
+    const end = componentStack.match(/[\n(]/);
+    if (start === -1 || !end || !end.index) return 'Unknown';
+    return componentStack.slice(start + 2, end.index - start).trim();
   }
 
   public throwError = (error: Error) => {

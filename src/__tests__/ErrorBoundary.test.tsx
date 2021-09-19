@@ -81,6 +81,43 @@ describe('ErrorBoundary component', () => {
         wrapper.unmount();
       });
 
+      it('componentStack is 5 lines at most', () => {
+        const TestComponent2: React.FunctionComponent<any> = props => {
+          return <TestComponent {...props} />;
+        };
+
+        const TestComponent3: React.FunctionComponent<any> = props => {
+          return <TestComponent2 {...props} />;
+        };
+
+        const TestComponent4: React.FunctionComponent<any> = props => {
+          return <TestComponent3 {...props} />;
+        };
+
+        const onError = jest.fn();
+        const wrapper = mount(
+          <ErrorBoundaryProvider reporter={reporter}>
+            <ErrorBoundary onError={onError}>
+              <TestComponent4 value={0} />
+            </ErrorBoundary>
+          </ErrorBoundaryProvider>,
+        );
+
+        const componentStack = `in TestComponent (created by TestComponent2)
+in TestComponent2 (created by TestComponent3)
+in TestComponent3 (created by TestComponent4)
+in TestComponent4
+in ErrorBoundary`;
+
+        expect(reporter.error).toBeCalledWith(ex.message, {
+          componentStack,
+          componentName: 'TestComponent',
+        });
+        expect(onError).toBeCalledWith(ex, componentStack);
+
+        wrapper.unmount();
+      });
+
       it('reports errors by default', () => {
         const wrapper = mount(
           <ErrorBoundaryProvider reporter={reporter}>
@@ -91,9 +128,8 @@ describe('ErrorBoundary component', () => {
         );
 
         expect(reporter.error).toBeCalledWith(ex.message, {
-          errorInfo: {
-            componentStack: expect.any(String),
-          },
+          componentName: 'TestComponent',
+          componentStack: expect.any(String),
         });
 
         wrapper.unmount();
