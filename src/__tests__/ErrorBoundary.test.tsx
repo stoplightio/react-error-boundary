@@ -1,10 +1,9 @@
 /* tslint:disable:jsx-wrap-multiline */
-import { ICoreReportingAPI } from '@stoplight/reporter';
+import * as Sentry from '@sentry/react';
 import { mount } from 'enzyme';
 import * as React from 'react';
 
 import { ErrorBoundary } from '../ErrorBoundary';
-import { ErrorBoundaryProvider } from '../ErrorBoundaryProvider';
 import { FallbackComponent } from '../FallbackComponent';
 
 describe('ErrorBoundary component', () => {
@@ -20,23 +19,12 @@ describe('ErrorBoundary component', () => {
     return <span>{String(value)}</span>;
   };
 
-  let reporter: ICoreReportingAPI;
-
-  beforeEach(() => {
-    reporter = {
-      ...console,
-      error: jest.fn(),
-    };
-  });
-
   describe('when exception is not thrown', () => {
     it('renders children', () => {
       const wrapper = mount(
-        <ErrorBoundaryProvider reporter={reporter}>
-          <ErrorBoundary>
-            <TestComponent value="test" />
-          </ErrorBoundary>
-        </ErrorBoundaryProvider>,
+        <ErrorBoundary>
+          <TestComponent value="test" />
+        </ErrorBoundary>,
       );
 
       expect(wrapper.find(TestComponent)).toHaveHTML('<span>test</span>');
@@ -48,140 +36,53 @@ describe('ErrorBoundary component', () => {
   describe('when exception is thrown', () => {
     it('renders fallback component and passes error-related props', () => {
       const wrapper = mount(
-        <ErrorBoundaryProvider reporter={reporter}>
-          <ErrorBoundary>
-            <TestComponent value={0} />
-          </ErrorBoundary>
-        </ErrorBoundaryProvider>,
+        <ErrorBoundary>
+          <TestComponent value={0} />
+        </ErrorBoundary>,
       );
 
       expect(wrapper.find(FallbackComponent)).toExist();
       expect(wrapper.find(FallbackComponent)).toHaveProp({
         error: ex,
         componentStack: expect.stringContaining('in TestComponent'),
-        tryRecovering: (wrapper.find(ErrorBoundary).instance() as any).recover,
+        tryRecovering: (wrapper.find(Sentry.ErrorBoundary).instance() as any).resetErrorBoundary,
       });
 
       wrapper.unmount();
     });
 
-    describe('error reporting', () => {
-      it('calls onError prop', () => {
-        const onError = jest.fn();
-        const wrapper = mount(
-          <ErrorBoundaryProvider reporter={reporter}>
-            <ErrorBoundary onError={onError}>
-              <TestComponent value={0} />
-            </ErrorBoundary>
-          </ErrorBoundaryProvider>,
-        );
+    it('calls onError prop', () => {
+      const onError = jest.fn();
+      const wrapper = mount(
+        <ErrorBoundary onError={onError}>
+          <TestComponent value={0} />
+        </ErrorBoundary>,
+      );
 
-        expect(onError).toBeCalledWith(ex, expect.stringContaining('in TestComponent'));
+      expect(onError).toBeCalledWith(ex, expect.stringContaining('in TestComponent'), expect.any(String));
 
-        wrapper.unmount();
-      });
-
-      it('reports errors by default', () => {
-        const wrapper = mount(
-          <ErrorBoundaryProvider reporter={reporter}>
-            <ErrorBoundary>
-              <TestComponent value={0} />
-            </ErrorBoundary>
-          </ErrorBoundaryProvider>,
-        );
-
-        expect(reporter.error).toBeCalledWith(ex.message, {
-          errorInfo: {
-            componentStack: expect.any(String),
-          },
-        });
-
-        wrapper.unmount();
-      });
-
-      it('does reports error if reporting is disabled', () => {
-        const wrapper = mount(
-          <ErrorBoundaryProvider reporter={reporter}>
-            <ErrorBoundary reportErrors={false}>
-              <TestComponent value={0} />
-            </ErrorBoundary>
-          </ErrorBoundaryProvider>,
-        );
-
-        expect(reporter.error).not.toBeCalled();
-
-        wrapper.unmount();
-      });
+      wrapper.unmount();
     });
 
     describe('and a custom fallback component is provided', () => {
-      describe('at the props level', () => {
-        it('renders it pass error-related props', () => {
-          const CustomFallbackComponent = () => <div>foo</div>;
+      it('renders it pass error-related props', () => {
+        const CustomFallbackComponent = () => <div>foo</div>;
 
-          const wrapper = mount(
-            <ErrorBoundaryProvider reporter={reporter}>
-              <ErrorBoundary FallbackComponent={CustomFallbackComponent}>
-                <TestComponent value={0} />
-              </ErrorBoundary>
-            </ErrorBoundaryProvider>,
-          );
+        const wrapper = mount(
+          <ErrorBoundary FallbackComponent={CustomFallbackComponent}>
+            <TestComponent value={0} />
+          </ErrorBoundary>,
+        );
 
-          expect(wrapper.find(FallbackComponent)).not.toExist(); // makes sure we don't render the original one
-          expect(wrapper.find(CustomFallbackComponent)).toExist();
-          expect(wrapper.find(CustomFallbackComponent)).toHaveProp({
-            error: ex,
-            componentStack: expect.stringContaining('in TestComponent'),
-            tryRecovering: (wrapper.find(ErrorBoundary).instance() as any).recover,
-          });
-
-          wrapper.unmount();
+        expect(wrapper.find(FallbackComponent)).not.toExist(); // makes sure we don't render the original one
+        expect(wrapper.find(CustomFallbackComponent)).toExist();
+        expect(wrapper.find(CustomFallbackComponent)).toHaveProp({
+          error: ex,
+          componentStack: expect.stringContaining('in TestComponent'),
+          tryRecovering: (wrapper.find(Sentry.ErrorBoundary).instance() as any).resetErrorBoundary,
         });
-      });
 
-      describe('at the provider level', () => {
-        it('renders it pass error-related props', () => {
-          const CustomFallbackComponent = () => <div>foo</div>;
-
-          const wrapper = mount(
-            <ErrorBoundaryProvider reporter={reporter} FallbackComponent={CustomFallbackComponent}>
-              >
-              <ErrorBoundary>
-                <TestComponent value={0} />
-              </ErrorBoundary>
-            </ErrorBoundaryProvider>,
-          );
-
-          expect(wrapper.find(FallbackComponent)).not.toExist(); // makes sure we don't render the original one
-          expect(wrapper.find(CustomFallbackComponent)).toExist();
-          expect(wrapper.find(CustomFallbackComponent)).toHaveProp({
-            error: ex,
-            componentStack: expect.stringContaining('in TestComponent'),
-            tryRecovering: (wrapper.find(ErrorBoundary).instance() as any).recover,
-          });
-
-          wrapper.unmount();
-        });
-      });
-
-      describe('at both the provider and props level', () => {
-        it('prefers the props one', () => {
-          const CustomFallbackContextComponent = () => <div>context!</div>;
-          const CustomFallbackPropsComponent = () => <div>level!</div>;
-
-          const wrapper = mount(
-            <ErrorBoundaryProvider reporter={reporter} FallbackComponent={CustomFallbackContextComponent}>
-              <ErrorBoundary FallbackComponent={CustomFallbackPropsComponent}>
-                <TestComponent value={0} />
-              </ErrorBoundary>
-            </ErrorBoundaryProvider>,
-          );
-
-          expect(wrapper.find(FallbackComponent)).not.toExist(); // makes sure we don't render the original one
-          expect(wrapper.find(CustomFallbackContextComponent)).not.toExist();
-          expect(wrapper.find(CustomFallbackPropsComponent)).toExist();
-          wrapper.unmount();
-        });
+        wrapper.unmount();
       });
 
       it('fallback component can try to recover', () => {
@@ -190,11 +91,9 @@ describe('ErrorBoundary component', () => {
         const getValue = jest.fn().mockReturnValue(0);
 
         const wrapper = mount(
-          <ErrorBoundaryProvider reporter={reporter}>
-            <ErrorBoundary FallbackComponent={CustomFallbackComponent}>
-              <TestComponent getValue={getValue} />
-            </ErrorBoundary>
-          </ErrorBoundaryProvider>,
+          <ErrorBoundary FallbackComponent={CustomFallbackComponent}>
+            <TestComponent getValue={getValue} />
+          </ErrorBoundary>,
         );
 
         expect(wrapper.find(CustomFallbackComponent)).toExist();

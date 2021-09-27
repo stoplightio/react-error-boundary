@@ -1,7 +1,6 @@
 import { ErrorBoundary as SentryErrorBoundary } from '@sentry/react';
 import { FallbackRender } from '@sentry/react/dist/errorboundary';
 import * as React from 'react';
-import { ErrorBoundaryContext } from './ErrorBoundaryProvider';
 import { FallbackComponent } from './FallbackComponent';
 import { ErrorBoundaryProps, FallbackProps } from './types';
 
@@ -23,8 +22,7 @@ function usePrev(value: GenericProps) {
 }
 
 export const ErrorBoundary: React.FC<ErrorBoundaryProps<GenericProps> & GenericProps> = props => {
-  const context = React.useContext(ErrorBoundaryContext);
-  const fallback = props.FallbackComponent || context.FallbackComponent || FallbackComponent;
+  const fallback = props.FallbackComponent || FallbackComponent;
   const ActualFallback = React.useMemo<FallbackRender>(() => wrapFallback(fallback), [fallback]);
 
   const boundaryRef = React.useRef<SentryErrorBoundary | null>(null);

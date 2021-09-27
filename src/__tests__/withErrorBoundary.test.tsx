@@ -21,7 +21,6 @@ describe('withErrorBoundary HOC', () => {
     const boundaryProps: ErrorBoundaryProps = {
       onError: jest.fn(),
       FallbackComponent: () => <div />,
-      reportErrors: false,
     };
 
     const MyWrappedComponent = withErrorBoundary(SchemaViewer, { ...boundaryProps });
@@ -36,13 +35,12 @@ describe('withErrorBoundary HOC', () => {
     const boundaryProps: ErrorBoundaryProps = {
       onError: jest.fn(),
       FallbackComponent: () => <div />,
-      reportErrors: false,
     };
 
     const MyWrappedComponent = withErrorBoundary(SchemaViewer, { ...boundaryProps });
     const wrapper = mount(<MyWrappedComponent schema={{}} name="" />);
 
-    expect(wrapper.find(SchemaViewer).prop<React.RefObject<ErrorBoundary>>('boundaryRef').current).toBeInstanceOf(
+    expect(wrapper.find(SchemaViewer).prop<React.RefObject<typeof ErrorBoundary>>('boundaryRef').current).toBeInstanceOf(
       ErrorBoundary,
     );
 
