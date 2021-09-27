@@ -8,7 +8,7 @@ export const withErrorBoundary = <P extends object = {}>(
   boundaryProps?: ErrorBoundaryProps<P>,
 ): React.FunctionComponent<P & ErrorBoundaryProps> => {
   const Wrapped: React.FunctionComponent<P> = props => {
-    const ref = React.createRef<ErrorBoundary>();
+    const ref = React.createRef<typeof ErrorBoundary>();
     return React.createElement(
       ErrorBoundary,
       {

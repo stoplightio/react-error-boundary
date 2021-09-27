@@ -18,7 +18,6 @@ export type ErrorBoundaryProps<P extends object = {}> = {
 
   // these are our own additions
   recoverableProps?: Array<keyof P>;
-  reportErrors?: boolean; // true by default
 };
 
 export type ErrorBoundaryForwardedProps = {
