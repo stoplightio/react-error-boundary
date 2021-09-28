@@ -12,7 +12,7 @@ The React error boundary tailored to Stoplight needs, inspired by [react-error-b
 ### Features
 
 - all the great features provided by [react-error-boundary](https://github.com/bvaughn/react-error-boundary),
-- built-in error reporting,
+- built-in error reporting powered by Sentry,
 - supports recovering,
 - fallback component can try to recover error boundary.
 
@@ -27,24 +27,7 @@ yarn add @stoplight/react-error-boundary
 
 ### Usage
 
-Before you start, you need to place the `ErrorBoundaryProvider` component, preferably at the root component
-
-```tsx
-import { ErrorBoundaryProvider } from '@stoplight/react-error-boundary';
-
-// a standard instance of Stoplight reporter 
-const reporter: IReporter = {
-  reportError() {},
-};
-
-const App = () => {
-  <ErrorBoundaryProvider reporter={reporter}>
-    <Content />
-  </ErrorBoundaryProvider>
-};
-```
-
-then, you can either make use of:
+You can either make use of:
 
 - withErrorBoundary HOC
 
