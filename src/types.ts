@@ -18,4 +18,6 @@ export type ErrorBoundaryProps<P extends object = {}> = {
   recoverableProps?: Array<keyof P>;
 };
 
+export type ErrorBoundaryForwardedProps = {};
+
 export type ErrorEventHandler = (error: Error, componentStack: string | null) => void;

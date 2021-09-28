@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { ErrorBoundary } from './ErrorBoundary';
-import { ErrorBoundaryProps } from './types';
+import { ErrorBoundaryForwardedProps, ErrorBoundaryProps } from './types';
 
 // inspired by https://github.com/bvaughn/react-error-boundary/blob/master/src/ErrorBoundary.js#L66
 export const withErrorBoundary = <P extends object = {}>(
-  Component: React.ComponentType<P>,
+  Component: React.ComponentType<P & ErrorBoundaryForwardedProps>,
   boundaryProps?: ErrorBoundaryProps<P>,
 ): React.FunctionComponent<P & ErrorBoundaryProps> => {
   const Wrapped: React.FunctionComponent<P> = props => {
@@ -14,7 +14,7 @@ export const withErrorBoundary = <P extends object = {}>(
         ...boundaryProps,
         ...props,
       },
-      React.createElement(Component,  props),
+      React.createElement(Component, props),
     );
   };
 
