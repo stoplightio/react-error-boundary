@@ -1,89 +1,49 @@
+import { ErrorBoundary as SentryErrorBoundary } from '@sentry/react';
+import { FallbackRender } from '@sentry/react/dist/errorboundary';
 import * as React from 'react';
 import { ErrorBoundaryContext } from './ErrorBoundaryProvider';
 import { FallbackComponent } from './FallbackComponent';
-import { ErrorBoundaryProps, ErrorBoundaryState } from './types';
+import { ErrorBoundaryProps, FallbackProps } from './types';
 
-export class ErrorBoundary<P extends object = {}> extends React.PureComponent<
-  P & ErrorBoundaryProps<P>,
-  ErrorBoundaryState
-> {
-  public static contextType = ErrorBoundaryContext;
-  public context!: React.ContextType<typeof ErrorBoundaryContext>;
+const wrapFallback = (Component: React.ElementType<FallbackProps>): FallbackRender => {
+  return props => (
+    <Component error={props.error} componentStack={props.componentStack} tryRecovering={props.resetError} />
+  );
+};
 
-  public state = {
-    error: null,
-    componentStack: null,
-  };
+type GenericProps = Record<string, unknown>;
 
-  public componentDidUpdate(prevProps: Readonly<P & ErrorBoundaryProps<P>>) {
-    if (
-      this.state.error !== null &&
-      this.props.recoverableProps !== void 0 &&
-      Array.isArray(this.props.recoverableProps)
-    ) {
-      for (const recoverableProp of this.props.recoverableProps) {
-        if (prevProps[recoverableProp] !== this.props[recoverableProp]) {
-          this.setError(null);
-          break;
-        }
-      }
-    }
-  }
+function usePrev(value: GenericProps) {
+  const ref = React.useRef<GenericProps>();
+  React.useEffect(() => {
+    ref.current = value;
+  }, [value]);
 
-  public componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
-    this.setError(error, errorInfo.componentStack);
-    this.handleError(error, errorInfo);
-  }
-
-  protected handleError(error: Error, errorInfo: React.ErrorInfo | null) {
-    if (this.props.reportErrors !== false) {
-      try {
-        if (errorInfo !== null) {
-          this.context.reporter.error(error.message, { errorInfo });
-        } else {
-          this.context.reporter.error(error);
-        }
-      } catch (ex) {
-        console.error('Error could not be reported', ex);
-      }
-    }
-
-    if (this.props.onError !== void 0) {
-      try {
-        this.props.onError(error, errorInfo && errorInfo.componentStack);
-      } catch {
-        // happens
-      }
-    }
-  }
-
-  public throwError = (error: Error) => {
-    this.setError(error);
-    this.handleError(error, null);
-  };
-
-  protected setError(error: Error | null, componentStack: string | null = null) {
-    this.setState({ error, componentStack });
-  }
-
-  protected recover = () => {
-    if (this.state.error !== null) {
-      this.setError(null);
-    } else if (process.env.NODE_ENV !== 'production') {
-      console.warn('Component has not crashed. Recovering is a no-op in such case');
-    }
-  };
-
-  public render() {
-    const {
-      props: { FallbackComponent: Fallback = this.context.FallbackComponent || FallbackComponent, children },
-      state: { error, componentStack },
-    } = this;
-
-    if (error !== null) {
-      return <Fallback error={error} componentStack={componentStack} tryRecovering={this.recover} />;
-    }
-
-    return children;
-  }
+  return ref.current;
 }
+
+export const ErrorBoundary: React.FC<ErrorBoundaryProps<GenericProps> & GenericProps> = props => {
+  const context = React.useContext(ErrorBoundaryContext);
+  const fallback = props.FallbackComponent || context.FallbackComponent || FallbackComponent;
+  const ActualFallback = React.useMemo<FallbackRender>(() => wrapFallback(fallback), [fallback]);
+
+  const boundaryRef = React.useRef<SentryErrorBoundary | null>(null);
+  const prevProps = usePrev(props);
+
+  React.useEffect(() => {
+    const boundary = boundaryRef.current;
+    if (!boundary || !prevProps || !boundary.state.error || !props.recoverableProps) return;
+
+    for (const recoverableProp of props.recoverableProps) {
+      if (prevProps[recoverableProp] !== props[recoverableProp]) {
+        boundary.resetErrorBoundary();
+      }
+    }
+  }, [props]);
+
+  return (
+    <SentryErrorBoundary ref={boundaryRef} showDialog={false} fallback={ActualFallback} onError={props.onError}>
+      {props.children}
+    </SentryErrorBoundary>
+  );
+};

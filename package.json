@@ -41,7 +41,7 @@
     "react-dom": ">=16.8"
   },
   "dependencies": {
-    "@stoplight/types": "^11.9.0"
+    "@sentry/react": "^6.13.2"
   },
   "devDependencies": {
     "@stoplight/reporter": "^1.7.6",
