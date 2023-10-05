@@ -1,4 +1,7 @@
 import * as React from 'react';
+import { GenericReactErrorBoundaryError } from './error';
+import { ErrorBoundary } from './ErrorBoundary';
+
 export type ErrorBoundaryState = {
   error: Error | null;
   componentStack: string | null;
@@ -16,8 +19,11 @@ export type ErrorBoundaryProps<P extends object = {}> = {
 
   // these are our own additions
   recoverableProps?: Array<keyof P>;
+  reportErrors?: boolean; // true by default
 };
 
-export type ErrorBoundaryForwardedProps = {};
+export type ErrorBoundaryForwardedProps = {
+  boundaryRef: React.RefObject<ErrorBoundary>;
+};
 
-export type ErrorEventHandler = (error: Error, componentStack: string | null) => void;
+export type ErrorEventHandler = (error: GenericReactErrorBoundaryError) => void;
