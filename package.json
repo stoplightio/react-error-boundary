@@ -37,14 +37,10 @@
     "yalc.watch": "nodemon --watch 'src/**/*' --exec 'yarn yalc'"
   },
   "peerDependencies": {
-    "react": ">=16.8",
-    "react-dom": ">=16.8"
+    "react": ">=16.8"
   },
-  "dependencies": {
-    "@sentry/react": "^6.13.2"
-  },
+  "dependencies": {},
   "devDependencies": {
-    "@stoplight/reporter": "^1.7.6",
     "@stoplight/scripts": "^7.0.3",
     "@stoplight/storybook-config": "^2.0.4",
     "@types/enzyme": "^3.10.3",
