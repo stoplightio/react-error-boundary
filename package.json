@@ -93,5 +93,8 @@
   },
   "release": {
     "extends": "@stoplight/scripts/release"
+  },
+  "resolutions": {
+    "elliptic": "6.6.1"
   }
 }
